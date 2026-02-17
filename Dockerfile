@@ -42,6 +42,11 @@ RUN groupadd --gid $GROUP_ID group \
     && chown $CONTAINER_USER --recursive $HOME
 USER $CONTAINER_USER
 
+# yt-dlp needs to solve JavaScript challenges presented by YouTube
+# using an external JavaScript runtime. See
+# https://github.com/yt-dlp/yt-dlp/wiki/EJS
+COPY --from=denoland/deno:bin /deno /usr/local/bin/deno
+
 ENV VENV_PATH=$HOME/venv
 RUN python -m venv $VENV_PATH
 ENV PATH="$VENV_PATH/bin:$PATH"
@@ -51,7 +56,7 @@ ENV PIP_CACHE_DIR=$HOME/.cache/pip
 
 RUN --mount=type=cache,target=$PIP_CACHE_DIR,uid=$USER_ID,gid=$GROUP_ID \
     \
-    pip install yt-dlp
+    pip install "yt-dlp[default]"
 
 ENTRYPOINT ["yt-dlp"]
 CMD ["--help"]
