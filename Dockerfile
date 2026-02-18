@@ -8,17 +8,19 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > \
         /etc/apt/apt.conf.d/keep-cache
 
+RUN if [ -n "$HTTP_PROXY" ]; then \
+        echo "Acquire::http::proxy \"$HTTP_PROXY/\";" > \
+            /etc/apt/apt.conf.d/10proxy; \
+    fi
+
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     \
-    echo "Acquire::http::proxy \"$HTTP_PROXY/\";" > \
-        /etc/apt/apt.conf.d/10proxy \
-    \
-    && apt-get update \
+    apt-get update \
     && apt-get install --yes --no-install-recommends \
+        ca-certificates \
         curl \
         ffmpeg \
-        ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Map the passed host user to the container user

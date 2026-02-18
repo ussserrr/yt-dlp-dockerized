@@ -5,7 +5,6 @@ export GROUP_ID=$(id -g $CONTAINER_USER)
 
 docker build \
 	--build-arg HTTP_PROXY \
-	--build-arg HTTPS_PROXY \
 	--build-arg CONTAINER_USER=$CONTAINER_USER \
 	--build-arg USER_ID=$USER_ID \
 	--build-arg GROUP_ID=$GROUP_ID \

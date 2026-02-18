@@ -1,8 +1,15 @@
+#!/usr/bin/env bash
+
+set -a
+source .env
+set +a
+
 export CONTAINER_USER=$(whoami)
+export _CONTAINER_DL_DIR="/home/$CONTAINER_USER/downloads"
 
 docker run \
     --rm \
     --env HTTPS_PROXY \
-    --mount type=bind,src=$HOME/downloads,dst=/home/$CONTAINER_USER/downloads \
+    --mount type=bind,src=$OUTPUT_DIR,dst=$_CONTAINER_DL_DIR \
     \
-    yt-dlp --no-check-certificate --compat-option no-certifi -f "best[height=720]" -P /home/$CONTAINER_USER/downloads $@
+    yt-dlp "${YT_DLP_OPTIONS[@]}" -P $_CONTAINER_DL_DIR $@
