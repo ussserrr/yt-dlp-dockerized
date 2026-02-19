@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 : "${CONTAINER_USER:=$(whoami)}"
 : "${USER_ID:=$(id -u $CONTAINER_USER)}"
 : "${GROUP_ID:=$(id -g $CONTAINER_USER)}"
