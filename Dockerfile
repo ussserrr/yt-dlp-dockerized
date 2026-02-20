@@ -58,7 +58,9 @@ ENV PIP_CACHE_DIR=$HOME/.cache/pip
 
 RUN --mount=type=cache,target=$PIP_CACHE_DIR,uid=$USER_ID,gid=$GROUP_ID \
     \
-    pip install "yt-dlp[default]"
+    pip install \
+        curl_cffi \
+        "yt-dlp[default]"
 
 ENTRYPOINT ["yt-dlp"]
 CMD ["--help"]
